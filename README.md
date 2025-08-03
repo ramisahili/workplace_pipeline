@@ -19,7 +19,7 @@ The pipeline performs the following tasks:
    Save metadata to MongoDB and download the documents to MinIO.
    Data is stored in minio in this format (partition_date/ref_no.extension)
 
-2. **Transformation**  
+2. **document processor**  
    Triggered via FastAPI (and optionally from Dagster), this process:
    - Retrieves documents by date from MongoDB
    - Fetches and parses files from MinIO (HTML parsed using BeautifulSoup)
@@ -42,7 +42,7 @@ The pipeline performs the following tasks:
 
 ---
 
-### 🔹 `FastAPI Transformer`
+### 🔹 `Document Processor (FastAPI)`
 
 **Purpose**:  
 - Given a date range:
