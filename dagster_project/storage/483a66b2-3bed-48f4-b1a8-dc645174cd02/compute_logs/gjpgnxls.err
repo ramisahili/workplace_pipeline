@@ -1,0 +1,6 @@
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - 4349 - LOGS_CAPTURED - Started capturing logs in process (pid: 4349).
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - 4349 - say_hello - STEP_START - Started execution of step "say_hello".
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - 4349 - say_hello - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - say_hello - Writing file at: /app/dagster_project/storage/483a66b2-3bed-48f4-b1a8-dc645174cd02/say_hello/result using PickledObjectFilesystemIOManager...
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - 4349 - say_hello - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-08-03 14:04:03 +0000 - dagster - DEBUG - hello_job - 483a66b2-3bed-48f4-b1a8-dc645174cd02 - 4349 - say_hello - STEP_SUCCESS - Finished execution of step "say_hello" in 45ms.

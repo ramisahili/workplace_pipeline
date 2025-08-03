@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pymongo
+python-dotenv
+boto3
+beautifulsoup4
+python-multipart
+pydantic>=2.0
+pydantic-settings>=2.0
+minio

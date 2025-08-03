@@ -1,0 +1,10 @@
+2025-08-03 16:30:13 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - LOGS_CAPTURED - Started capturing logs in process (pid: 1249).
+2025-08-03 16:30:13 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - run_spider_asset - STEP_START - Started execution of step "run_spider_asset".
+2025-08-03 16:30:13 +0000 - dagster - INFO - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - run_spider_asset - [SPIDER ASSET] Running spider from 2025-08-01 to 2025-08-02
+2025-08-03 16:30:32 +0000 - dagster - INFO - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - run_spider_asset - Spider finished successfully
+2025-08-03 16:30:32 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - run_spider_asset
+2025-08-03 16:30:32 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - run_spider_asset - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-08-03 16:30:32 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - run_spider_asset - Writing file at: /app/dagster_project/storage/run_spider_asset using PickledObjectFilesystemIOManager...
+2025-08-03 16:30:33 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - run_spider_asset - ASSET_MATERIALIZATION - Materialized value run_spider_asset.
+2025-08-03 16:30:33 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - run_spider_asset - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-08-03 16:30:33 +0000 - dagster - DEBUG - __ASSET_JOB - 5a5cc08a-9347-4873-b7ad-a81b003b9a8c - 1249 - run_spider_asset - STEP_SUCCESS - Finished execution of step "run_spider_asset" in 19.57s.

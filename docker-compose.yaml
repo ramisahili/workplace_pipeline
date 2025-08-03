@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  transformer:
+    build:
+      context: ./document_processor
+      dockerfile: Dockerfile
+    container_name: fastapi_transformer
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://ramirami:rami123@mongodb:27017
+      - MONGO_DB=kedra
+      - MONGO_INPUT_COLLECTION=workplace
+      - MONGO_OUTPUT_COLLECTION=transformed_documents
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_INPUT_BUCKET=workplace
+      - MINIO_OUTPUT_BUCKET=workplace-transformed
+    depends_on:
+      - mongodb
+      - minio
+
+  kedra_spider:
+    build:
+      context: ./spiders
+      dockerfile: Dockerfile
+    volumes:
+      - ./spiders:/app/spiders
+    depends_on:
+      - mongodb
+      - minio
+    working_dir: /app/kedra_spider
+    entrypoint: ["tail", "-f", "/dev/null"]  # keeps container idle (for Dagster/manual triggering)
+
+  dagster:
+    build:
+      context: ./dagster_project
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dagster_project:/app/dagster_project
+      - ./spiders:/app/spiders  # <-- mount spiders here
+    environment:
+      DAGSTER_HOME: /app/dagster_project
+
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ramirami
+      MONGO_INITDB_ROOT_PASSWORD: rami123
+    volumes:
+      - mongo_data:/data/db
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9090"
+    ports:
+      - "9000:9000"   # S3 API
+      - "9090:9090"   # Web UI
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+volumes:
+  mongo_data:
+  minio_data:

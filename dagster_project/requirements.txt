@@ -1,0 +1,7 @@
+scrapy==2.13.3
+minio
+pymongo
+itemadapter
+dagster
+dagster-webserver
+httpx

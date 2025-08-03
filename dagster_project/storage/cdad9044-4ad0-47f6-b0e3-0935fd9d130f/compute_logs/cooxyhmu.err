@@ -1,0 +1,8 @@
+2025-08-03 17:24:22 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - LOGS_CAPTURED - Started capturing logs in process (pid: 3571).
+2025-08-03 17:24:22 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - trigger_transform_api - STEP_START - Started execution of step "trigger_transform_api".
+2025-08-03 17:24:47 +0000 - dagster - INFO - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - trigger_transform_api - Successfully triggered transformation API for 2025-01-01 to 2025-08-01.
+2025-08-03 17:24:47 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - trigger_transform_api - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-08-03 17:24:47 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - trigger_transform_api - Writing file at: /app/dagster_project/storage/trigger_transform_api using PickledObjectFilesystemIOManager...
+2025-08-03 17:24:47 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - trigger_transform_api - ASSET_MATERIALIZATION - Materialized value trigger_transform_api.
+2025-08-03 17:24:47 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - trigger_transform_api - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-08-03 17:24:47 +0000 - dagster - DEBUG - __ASSET_JOB - cdad9044-4ad0-47f6-b0e3-0935fd9d130f - 3571 - trigger_transform_api - STEP_SUCCESS - Finished execution of step "trigger_transform_api" in 25.57s.

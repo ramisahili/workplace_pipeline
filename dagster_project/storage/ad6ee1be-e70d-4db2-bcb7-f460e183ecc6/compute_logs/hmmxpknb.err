@@ -1,0 +1,27 @@
+2025-08-03 14:09:43 +0000 - dagster - DEBUG - spider_job - ad6ee1be-e70d-4db2-bcb7-f460e183ecc6 - 1329 - LOGS_CAPTURED - Started capturing logs in process (pid: 1329).
+2025-08-03 14:09:43 +0000 - dagster - DEBUG - spider_job - ad6ee1be-e70d-4db2-bcb7-f460e183ecc6 - 1329 - run_spider - STEP_START - Started execution of step "run_spider".
+2025-08-03 14:09:43 +0000 - dagster - INFO - spider_job - ad6ee1be-e70d-4db2-bcb7-f460e183ecc6 - run_spider - Running spider from 1/1/2025 to 1/8/2025
+2025-08-03 14:09:43 +0000 - dagster - ERROR - spider_job - ad6ee1be-e70d-4db2-bcb7-f460e183ecc6 - 1329 - run_spider - STEP_FAILURE - Execution of step "run_spider" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "run_spider"::
+
+FileNotFoundError: [Errno 2] No such file or directory: '/app/spiders/kedra_spider'
+
+Stack Trace:
+  File "/usr/local/lib/python3.10/site-packages/dagster/_core/execution/plan/utils.py", line 57, in op_execution_error_boundary
+    yield
+  File "/usr/local/lib/python3.10/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
+    next_output = next(iterator)
+  File "/usr/local/lib/python3.10/site-packages/dagster/_core/execution/plan/compute_generator.py", line 137, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/usr/local/lib/python3.10/site-packages/dagster/_core/execution/plan/compute_generator.py", line 117, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/app/dagster_project/jobs.py", line 17, in run_spider
+    subprocess.run(
+  File "/usr/local/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/usr/local/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/local/lib/python3.10/subprocess.py", line 1863, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+
