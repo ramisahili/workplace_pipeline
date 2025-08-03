@@ -17,6 +17,7 @@ The pipeline performs the following tasks:
 1. **Scraping**  
    Crawl workplace search results and extract ref number, date, description, and document links.  
    Save metadata to MongoDB and download the documents to MinIO.
+   Data is stored in minio in this format (partition_date/ref_no.extension)
 
 2. **Transformation**  
    Triggered via FastAPI (and optionally from Dagster), this process:
@@ -50,7 +51,7 @@ The pipeline performs the following tasks:
   - Upload to new MinIO bucket (`workplace-transformed`)
   - Save enriched metadata to new collection `transformed_documents
 
-How to run:
+**How to run**
 
 docker-compose up -d 
 
