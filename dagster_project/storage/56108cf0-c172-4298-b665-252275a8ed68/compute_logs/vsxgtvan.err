@@ -1,2 +1,0 @@
-2025-08-03 18:09:04 +0000 - dagster - DEBUG - __ASSET_JOB - 56108cf0-c172-4298-b665-252275a8ed68 - 2252 - LOGS_CAPTURED - Started capturing logs in process (pid: 2252).
-2025-08-03 18:09:04 +0000 - dagster - DEBUG - __ASSET_JOB - 56108cf0-c172-4298-b665-252275a8ed68 - 2252 - trigger_transform_api - STEP_START - Started execution of step "trigger_transform_api".

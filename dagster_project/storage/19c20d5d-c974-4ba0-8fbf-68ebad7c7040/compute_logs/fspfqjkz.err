@@ -1,3 +1,0 @@
-2025-08-03 16:53:58 +0000 - dagster - DEBUG - __ASSET_JOB - 19c20d5d-c974-4ba0-8fbf-68ebad7c7040 - 3297 - LOGS_CAPTURED - Started capturing logs in process (pid: 3297).
-2025-08-03 16:53:58 +0000 - dagster - DEBUG - __ASSET_JOB - 19c20d5d-c974-4ba0-8fbf-68ebad7c7040 - 3297 - run_spider_asset - STEP_START - Started execution of step "run_spider_asset".
-2025-08-03 16:53:58 +0000 - dagster - INFO - __ASSET_JOB - 19c20d5d-c974-4ba0-8fbf-68ebad7c7040 - run_spider_asset - [SPIDER ASSET] Running spider from 2025-01-01 to 2025-08-01
