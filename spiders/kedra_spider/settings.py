@@ -21,6 +21,8 @@ MONGO_URI = 'mongodb://ramirami:rami123@mongodb:27017'
 MONGO_DATABASE = 'kedra'
 MONGO_COLLECTION = 'workplace'
 
+MINIO_WORKPLACE_URL = 'http://localhost:9090/browser/workplace/'
+
 MINIO_ENDPOINT = 'minio:9000'
 MINIO_ACCESS_KEY = 'minioadmin'
 MINIO_SECRET_KEY = 'minioadmin'

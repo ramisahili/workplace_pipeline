@@ -12,12 +12,12 @@ from minio.error import S3Error
 logger = logging.getLogger(__name__)
 
 
-
 def transform_file(file_bytes: bytes, ref_no: str) -> tuple[str, bytes, str]:
     soup = BeautifulSoup(file_bytes, 'html.parser')
 
     # Precise selection: container -> inner container -> row -> col-sm-9
-    container = soup.select_one('div.container.mb-4 div.container div.row div.col-sm-9')
+    container = soup.select_one(
+        'div.container.mb-4 div.container div.row div.col-sm-9')
 
     if container:
         content_html = container.prettify()
@@ -31,11 +31,9 @@ def transform_file(file_bytes: bytes, ref_no: str) -> tuple[str, bytes, str]:
     return new_name, transformed_bytes, new_hash
 
 
-
-
 def run_transformation(start_date: str, end_date: str):
-    logger.info(f"[DEBUG] Received start_date={repr(start_date)}, end_date={repr(end_date)}")
-
+    logger.info(
+        f"[DEBUG] Received start_date={repr(start_date)}, end_date={repr(end_date)}")
 
     query = {
         "partition_date": {
@@ -43,8 +41,8 @@ def run_transformation(start_date: str, end_date: str):
             "$lte": end_date
         }
     }
-    
 
+    ##fetch the documents metadata
     documents = list(input_collection.find(query))
     documents_count = len(documents)
     logger.info(f"[QUERY] Mongo returned {len(documents)} documents")
@@ -52,18 +50,25 @@ def run_transformation(start_date: str, end_date: str):
     if not documents:
         logger.info("[EMPTY] No documents found for the given date range")
         return
+    
+    ## create the target bucket if it doesn't exist
+    if not minio_client.bucket_exists(settings.MINIO_TARGET_BUCKET):
+        minio_client.make_bucket(settings.MINIO_TARGET_BUCKET)
+        logger.info(f"Created bucket {settings.MINIO_TARGET_BUCKET}")
 
+    ## iterate the metadata, and for each record download the file, double check the ext, change file hash, and insert the new data
     for doc in documents:
         model = DocumentModel(**doc)
         try:
             file_obj = minio_client.get_object(
-                settings.MINIO_SOURCE_BUCKET, model.file_path)
+                settings.MINIO_SOURCE_BUCKET, model.file_name)
             file_data = file_obj.read()
         except S3Error as e:
-            logger.error(f"[SKIP] MinIO file not found: {model.file_path} — {e.code}")
+            logger.error(
+                f"[SKIP] MinIO file not found: {model.file_name} — {e.code}")
             continue
 
-        ext = os.path.splitext(model.file_path)[1].lower()
+        ext = os.path.splitext(model.file_name)[1].lower()
         if ext == '.html':
             new_name, new_data, new_hash = transform_file(
                 file_data, model.ref_no)
@@ -76,7 +81,7 @@ def run_transformation(start_date: str, end_date: str):
                 length=len(new_data)
             )
             logger.info(
-                f"Transformed HTML file {model.file_path}, new length: {len(new_data)}")
+                f"Transformed HTML file {model.file_name}, new length: {len(new_data)}")
         else:
             object_path = f"{model.partition_date}/{model.ref_no}{ext}"
             minio_client.put_object(
@@ -86,9 +91,9 @@ def run_transformation(start_date: str, end_date: str):
                 length=len(file_data)
             )
             logger.info(
-                f"Copied non-HTML file {model.file_path}, size: {len(file_data)}")
+                f"Copied non-HTML file {model.file_name}, size: {len(file_data)}")
 
-        model.file_path = object_path
+        model.file_path = settings.MINIO_TRANSFORMED_URL + object_path
         output_collection.insert_one(model.dict())
         logger.info(
             f"Inserted transformed document for ref_no {model.ref_no} into output collection")

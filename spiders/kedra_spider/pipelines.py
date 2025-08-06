@@ -11,7 +11,7 @@ import hashlib
 
 class MongoMetadataPipeline:
     def __init__(self, mongo_uri, mongo_db, mongo_collection,
-                 minio_endpoint, minio_access_key, minio_secret_key, bucket_name):
+                 minio_endpoint, minio_access_key, minio_secret_key, bucket_name, minio_workplace_url):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
         self.mongo_collection = mongo_collection
@@ -19,6 +19,7 @@ class MongoMetadataPipeline:
         self.minio_access_key = minio_access_key
         self.minio_secret_key = minio_secret_key
         self.bucket_name = bucket_name
+        self.minio_workplace_url = minio_workplace_url
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -29,7 +30,8 @@ class MongoMetadataPipeline:
             minio_endpoint=crawler.settings.get("MINIO_ENDPOINT", "minio:9000"),
             minio_access_key=crawler.settings.get("MINIO_ACCESS_KEY", "minio"),
             minio_secret_key=crawler.settings.get("MINIO_SECRET_KEY", "minio123"),
-            bucket_name=crawler.settings.get("MINIO_BUCKET", "workplace")
+            bucket_name=crawler.settings.get("MINIO_BUCKET", "workplace"),
+            minio_workplace_url=crawler.settings.get("MINIO_WORKPLACE_URL"),
         )
 
     def open_spider(self, spider):
@@ -60,7 +62,7 @@ class MongoMetadataPipeline:
         ref_no = adapter.get("ref_no")
         link = adapter.get("link")
         extension = "html" if link.endswith(".html") else link.split(".")[-1]
-        file_path = f"{partition_date}/{ref_no}.{extension}"
+        file_name = f"{partition_date}/{ref_no}.{extension}"
 
         try:
             response = requests.get(link)
@@ -71,7 +73,7 @@ class MongoMetadataPipeline:
 
             self.minio_client.put_object(
                 bucket_name=self.bucket_name,
-                object_name=file_path,
+                object_name=file_name,
                 data=io.BytesIO(content),
                 length=len(content),
                 content_type="text/html"
@@ -79,7 +81,8 @@ class MongoMetadataPipeline:
 
             metadata_doc = adapter.asdict()
             metadata_doc["partition_date"] = partition_date
-            metadata_doc["file_path"] = file_path
+            metadata_doc["file_name"] = file_name
+            metadata_doc["file_path"] = self.minio_workplace_url + file_name
             metadata_doc["file_hash"] = file_hash
 
             result = self.collection.insert_one(metadata_doc)

@@ -1,7 +1,7 @@
 import scrapy
 from ..items import WorkplaceItem
 from urllib.parse import urlencode
-
+import re
 
 class WorkplaceSpider(scrapy.Spider):
     name = "workplace"
@@ -57,7 +57,6 @@ class WorkplaceSpider(scrapy.Spider):
             return
 
         for item in items:
-            title = item.css("h2.title::text").get(default="").strip()
             link = item.css("h2.title a::attr(href)").get()
             if link:
                 link = response.urljoin(link)
@@ -68,7 +67,7 @@ class WorkplaceSpider(scrapy.Spider):
                 or item.css("p::text").get()
             )
             if description:
-                description = description.strip()
+                description = re.sub(r'\s+', ' ', description.replace('\n', ' ')).strip()
 
             ref_no = (
                 item.css("div.refno::text").get()
@@ -80,7 +79,6 @@ class WorkplaceSpider(scrapy.Spider):
                 body_name=body_name,
                 page=page,
                 ref_no=ref_no,
-                title=title,
                 date=date,
                 description=description,
                 link=link

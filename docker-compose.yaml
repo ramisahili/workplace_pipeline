@@ -38,14 +38,15 @@ services:
     build:
       context: ./dagster_project
       dockerfile: Dockerfile
+    container_name: dagster
     ports:
       - "3000:3000"
     volumes:
       - ./dagster_project:/app/dagster_project
-      - ./spiders:/app/spiders  # <-- mount spiders here
+      - ./spiders:/app/spiders
     environment:
       DAGSTER_HOME: /app/dagster_project
-
+    entrypoint: ["sh", "-c", "dagster-daemon run & dagster-webserver -h 0.0.0.0 -p 3000"]
 
   mongodb:
     image: mongo:6.0

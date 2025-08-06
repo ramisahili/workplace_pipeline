@@ -11,13 +11,13 @@ class Settings(BaseSettings):
     MINIO_SECRET_KEY: str = "minioadmin"
     MINIO_SOURCE_BUCKET: str = "workplace"
     MINIO_TARGET_BUCKET: str = "workplace-transformed"
+    MINIO_TRANSFORMED_URL: str = "http://localhost:9090/browser/workplace-transformed/"
 
     class Config:
         env_file = ".env"
 
 settings = Settings()
 
-# For direct imports (as your code tries to do)
 MONGO_URI = settings.MONGO_URI
 MONGO_DB = settings.MONGO_DB
 MONGO_INPUT_COLLECTION = settings.MONGO_INPUT_COLLECTION

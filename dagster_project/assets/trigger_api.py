@@ -1,31 +1,28 @@
 import requests
 import os
 from dagster import asset, EnvVar, MetadataValue
+from utils import split_date_range_by_month
 
 FASTAPI_TRANSFORMER_URL = os.getenv(
     "TRANSFORMER_API_URL", "http://transformer:8000")
 
 
-@asset(metadata={"owner": "rami", "description": "Trigger FastAPI transformation service."})
+@asset(metadata={"kedra": "rami", "description": "Trigger FastAPI transformation service."})
 def trigger_transform_api(context):
     start_date = context.op_config.get("start_date")
     end_date = context.op_config.get("end_date")
 
     if not start_date or not end_date:
-        raise ValueError(
-            "start_date and end_date must be provided in op_config")
+        raise ValueError("start_date and end_date must be provided in op_config")
 
-    payload = {
-        "start_date": start_date,
-        "end_date": end_date
-    }
+    months = split_date_range_by_month(start_date, end_date)
 
-    response = requests.post(
-        f"{FASTAPI_TRANSFORMER_URL}/transform", json=payload)
+    for start, end in months:
+        payload = {"start_date": start, "end_date": end}
+        response = requests.post(f"{FASTAPI_TRANSFORMER_URL}/transform", json=payload)
 
-    if response.status_code == 200:
-        context.log.info(
-            f"Successfully triggered transformation API for {start_date} to {end_date}.")
-    else:
-        raise Exception(
-            f"API call failed: {response.status_code} - {response.text}")
+        if response.status_code == 200:
+            context.log.info(f"Triggered transform API for {start} to {end}")
+        else:
+            raise Exception(f"API call failed: {response.status_code} - {response.text}")
+
