@@ -2,7 +2,7 @@ import logging
 from app.mongo_client import input_collection, output_collection
 from app.minio_client import minio_client
 from app.models.metadata_model import DocumentModel
-from app.config import settings
+from app import config
 from bs4 import BeautifulSoup
 import hashlib
 import os
@@ -52,16 +52,16 @@ def run_transformation(start_date: str, end_date: str):
         return
     
     ## create the target bucket if it doesn't exist
-    if not minio_client.bucket_exists(settings.MINIO_TARGET_BUCKET):
-        minio_client.make_bucket(settings.MINIO_TARGET_BUCKET)
-        logger.info(f"Created bucket {settings.MINIO_TARGET_BUCKET}")
+    if not minio_client.bucket_exists(config.MINIO_TARGET_BUCKET):
+        minio_client.make_bucket(config.MINIO_TARGET_BUCKET)
+        logger.info(f"Created bucket {config.MINIO_TARGET_BUCKET}")
 
     ## iterate the metadata, and for each record download the file, double check the ext, change file hash, and insert the new data
     for doc in documents:
         model = DocumentModel(**doc)
         try:
             file_obj = minio_client.get_object(
-                settings.MINIO_SOURCE_BUCKET, model.file_name)
+                config.MINIO_SOURCE_BUCKET, model.file_name)
             file_data = file_obj.read()
         except S3Error as e:
             logger.error(
@@ -75,17 +75,17 @@ def run_transformation(start_date: str, end_date: str):
             model.file_hash = new_hash
             object_path = f"{model.partition_date}/{new_name}"
             minio_client.put_object(
-                settings.MINIO_TARGET_BUCKET,
+                config.MINIO_TARGET_BUCKET,
                 object_path,
                 data=io.BytesIO(new_data),
                 length=len(new_data)
             )
             logger.info(
-                f"Transformed HTML file {model.file_name}, new length: {len(new_data)}")
+                f"Transformed HTML file {model.file_name}")
         else:
             object_path = f"{model.partition_date}/{model.ref_no}{ext}"
             minio_client.put_object(
-                settings.MINIO_TARGET_BUCKET,
+                config.MINIO_TARGET_BUCKET,
                 object_path,
                 data=io.BytesIO(file_data),
                 length=len(file_data)
@@ -93,7 +93,7 @@ def run_transformation(start_date: str, end_date: str):
             logger.info(
                 f"Copied non-HTML file {model.file_name}, size: {len(file_data)}")
 
-        model.file_path = settings.MINIO_TRANSFORMED_URL + object_path
+        model.file_path = config.MINIO_TRANSFORMED_URL + object_path
         output_collection.insert_one(model.dict())
         logger.info(
             f"Inserted transformed document for ref_no {model.ref_no} into output collection")

@@ -1,30 +1,13 @@
-from pydantic_settings import BaseSettings
+import os
 
-class Settings(BaseSettings):
-    MONGO_URI: str = "mongodb://ramirami:rami123@mongodb:27017"
-    MONGO_DB: str = "kedra"
-    MONGO_INPUT_COLLECTION: str = "workplace"
-    MONGO_OUTPUT_COLLECTION: str = "transformed_documents"
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://ramirami:rami123@mongodb:27017")
+MONGO_DB = os.environ.get("MONGO_DB", "kedra")
+MONGO_INPUT_COLLECTION = os.environ.get("MONGO_INPUT_COLLECTION", "workplace")
+MONGO_OUTPUT_COLLECTION = os.environ.get("MONGO_OUTPUT_COLLECTION", "transformed_documents")
 
-    MINIO_ENDPOINT: str = "minio:9000"
-    MINIO_ACCESS_KEY: str = "minioadmin"
-    MINIO_SECRET_KEY: str = "minioadmin"
-    MINIO_SOURCE_BUCKET: str = "workplace"
-    MINIO_TARGET_BUCKET: str = "workplace-transformed"
-    MINIO_TRANSFORMED_URL: str = "http://localhost:9090/browser/workplace-transformed/"
-
-    class Config:
-        env_file = ".env"
-
-settings = Settings()
-
-MONGO_URI = settings.MONGO_URI
-MONGO_DB = settings.MONGO_DB
-MONGO_INPUT_COLLECTION = settings.MONGO_INPUT_COLLECTION
-MONGO_OUTPUT_COLLECTION = settings.MONGO_OUTPUT_COLLECTION
-
-MINIO_ENDPOINT = settings.MINIO_ENDPOINT
-MINIO_ACCESS_KEY = settings.MINIO_ACCESS_KEY
-MINIO_SECRET_KEY = settings.MINIO_SECRET_KEY
-MINIO_SOURCE_BUCKET = settings.MINIO_SOURCE_BUCKET
-MINIO_TARGET_BUCKET = settings.MINIO_TARGET_BUCKET
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "minio:9000")
+MINIO_ACCESS_KEY = os.environ.get("MINIO_ACCESS_KEY", "minioadmin")
+MINIO_SECRET_KEY = os.environ.get("MINIO_SECRET_KEY", "minioadmin")
+MINIO_SOURCE_BUCKET = os.environ.get("MINIO_SOURCE_BUCKET", "workplace")
+MINIO_TARGET_BUCKET = os.environ.get("MINIO_TARGET_BUCKET", "workplace-transformed")
+MINIO_TRANSFORMED_URL = os.environ.get("MINIO_TRANSFORMED_URL", "http://localhost:9090/browser/workplace-transformed/")
