@@ -33,7 +33,7 @@ def transform_file(file_bytes: bytes, ref_no: str) -> tuple[str, bytes, str]:
 
 def run_transformation(start_date: str, end_date: str):
     logger.info(
-        f"[DEBUG] Received start_date={repr(start_date)}, end_date={repr(end_date)}")
+        f"Received start_date={repr(start_date)}, end_date={repr(end_date)}")
 
     query = {
         "partition_date": {
